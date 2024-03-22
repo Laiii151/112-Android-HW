@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Account_0317</string>
+    <string name="input_account">帳號</string>
+    <string name="input_password">密碼</string>
+    <string name="sent">登入</string>
+    <string name="Show"></string>
+</resources>
