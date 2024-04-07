@@ -37,6 +37,14 @@
             android:layout_weight="0.5"
             android:textSize="36sp"
             android:onClick="processKeyInput"/>
+
+        <Button
+            android:layout_width="137dp"
+            android:layout_height="100dp"
+            android:layout_weight="0.5"
+            android:onClick="processKeyInput"
+            android:text="+/-"
+            android:textSize="36sp" />
     </LinearLayout>
     <GridLayout
         android:layout_width="match_parent"

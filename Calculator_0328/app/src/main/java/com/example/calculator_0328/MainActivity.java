@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         decimalCouter++;
                         break;
                 }
-                edt.setText("" + Double.toString(theValue));
+                edt.setText(String.valueOf(theValue));
                 break;
 
             case ".":
@@ -106,6 +106,13 @@ public class MainActivity extends AppCompatActivity {
                     state = State.DecimalInput;
                     decimalCouter=1;
                     edt.setText(edt.getText().toString() + ".");
+                }
+                break;
+
+            case "+/-": // 負號按鈕
+                if (theValue != 0) {
+                    theValue = -theValue; // 將目前的值改為負數
+                    edt.setText(String.valueOf(theValue));
                 }
                 break;
 
