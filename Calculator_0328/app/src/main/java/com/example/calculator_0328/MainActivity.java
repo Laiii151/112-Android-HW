@@ -112,13 +112,14 @@ public class MainActivity extends AppCompatActivity {
             case "Clear": // 清除並重設相關變數
                 state=State.FirstNumberInput;
                 theValue=0;
-                edt.setText((CharSequence)("0"));
+                edt.setText((CharSequence)("0.0"));
                 op=OP.None;
                 operand2=operand1=0;
                 break;
             case "Back": // 倒退鍵
                 theValue=(int)(theValue/10);
-                edt.setText("" + theValue);
+                //edt.setText("" + theValue);
+                edt.setText(String.valueOf(theValue));
                 break;
             case "+":
             case "-":
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             case "/": // 當operator被點選時
                 switch(state) { // 依據當時的狀態決定不同的處理
                     case FirstNumberInput:
+                    case DecimalInput:
                         operand1=theValue;
                         operand2=theValue;
                         switch(bstr) {
@@ -161,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
                             case "/": op=OP.Div; break;
                         }
                         state=State.OperatorInputed;
-                        edt.setText("" + theValue);
+                        //edt.setText("" + theValue);
+                        edt.setText(String.valueOf(theValue));
                         break;
                 }
                 break;
@@ -175,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     operand1=theValue;
                 }
-                else if(state==State.NumberInput) {
+                else if(state==State.NumberInput || state==State.DecimalInput) {
                     operand2=theValue;
                     switch(op) {
                         case Add: theValue=operand1+operand2; break;
@@ -186,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
                     operand1=theValue;
                     state=State.OperatorInputed;
                 }
-                edt.setText("" + theValue);
+                edt.setText(String.valueOf(theValue));
+                //edt.setText("" + theValue);
                 break;
         }
     }
