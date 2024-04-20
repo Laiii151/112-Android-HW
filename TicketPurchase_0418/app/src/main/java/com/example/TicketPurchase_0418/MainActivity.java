@@ -7,27 +7,23 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.InputMismatchException;
 
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, TextWatcher {
     private TextView output;
     private EditText edtnumber;
-
     private String outputStr = "";
     private String outputGen = "";
     private String outputType = "";
     private String outputPrice = "";
-    private String outputnum = "";
-
     private RadioGroup rg;
-
     private RadioGroup type;
 
     @Override
@@ -48,19 +44,40 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                        if (edtnumber.getText().toString().isEmpty()) {
-                            output.setText("請輸入購買張數!");
-                            output.setTextColor(Color.RED);
+                    String Str = "";
+                    try {
+                        String text = edtnumber.getText().toString();
+                        if (!text.isEmpty()) {
+                            if (rg.getCheckedRadioButtonId() == -1) {
+                                Str += "請選擇性別!\n";
+                            }
+                            else if(type.getCheckedRadioButtonId() == -1) {
+                                Str += "請選擇票種!\n";
+                            }
+                            else{
+                                // 如果 EditText 和 RadioButton 都有資料，執行跳轉操作
+                                Intent intent = new Intent(MainActivity.this, TicketInformationActivity.class);
+                                intent.putExtra("outputStr", outputStr);
+                                startActivity(intent);
+                            }
                         }
-                        else if (rg.getCheckedRadioButtonId() == -1 || type.getCheckedRadioButtonId() == -1) {
-                            output.setText("請選擇性別和票種!");
-                            output.setTextColor(Color.RED);
-                        } else {
-                            Intent intent = new Intent(MainActivity.this, TicketInformationActivity.class);
-                            intent.putExtra("outputStr", outputStr);
-                            startActivity(intent);
+                        else if(text == null){
+                            if (rg.getCheckedRadioButtonId() == -1) {
+                                Str += "請選擇性別!\n";
+                                if(type.getCheckedRadioButtonId() == -1)
+                                    Str += "請選擇票種!\n";
+                            }
+                            else if(type.getCheckedRadioButtonId() == -1)
+                                Str += "請選擇票種!\n";
+                            throw new NumberFormatException();
                         }
+                        output.setText(Str);
+                        output.setTextColor(Color.RED);
+                    } catch (NumberFormatException e) {
+                        Str += "請輸入購買張數!";
+                        output.setText(Str);
+                        output.setTextColor(Color.RED);
+                    }
                 }
             });
     }
@@ -85,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     public void TxvShow(RadioGroup radioGroup, int checkedId){
         //int num = Integer.parseInt(edtnumber.getText().toString());
-        outputnum = edtnumber.getText().toString();
+        String outputnum = edtnumber.getText().toString();
         // 判斷選擇的 RadioButton
         if (radioGroup.getId() == R.id.rgGender) {
             if (checkedId == R.id.rdbBoy) {
@@ -105,13 +122,17 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
 
         if(! outputnum.isEmpty()){
-            if(radioGroup.getId() == R.id.rgType) {
+            if(type.getCheckedRadioButtonId() == -1){
+                outputType="";
+            }
+
+            else if(radioGroup.getId() == R.id.rgType) {
                 if (checkedId == R.id.rdbAdult) {
-                    outputPrice = "\n金額：" + String.valueOf(500 * Integer.parseInt(outputnum));
+                    outputPrice = "\n金額：" + (500 * Integer.parseInt(outputnum));
                 } else if (checkedId == R.id.rdbChild) {
-                    outputPrice = "\n金額：" + String.valueOf(250 * Integer.parseInt(outputnum));
+                    outputPrice = "\n金額：" + (250 * Integer.parseInt(outputnum));
                 } else {
-                    outputPrice = "\n金額：" + String.valueOf(400 * Integer.parseInt(outputnum));
+                    outputPrice = "\n金額：" + (400 * Integer.parseInt(outputnum));
                 }
             }
             outputnum = "張數：" + outputnum;
@@ -125,4 +146,18 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         output.setText(outputStr);
         output.setTextColor(Color.BLACK);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String modifiedStr = data.getStringExtra("OutputStr");
+            if(modifiedStr != null && !modifiedStr.isEmpty()){
+                output.setText("有資料");
+            }else output.setText("無資料");
+        }
+        else output.setText("無資料");
+    }
+
+
 }
