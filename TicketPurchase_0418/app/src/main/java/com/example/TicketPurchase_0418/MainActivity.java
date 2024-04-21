@@ -99,9 +99,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         TxvShow(radioGroup, checkedId);
     }
 
-
     public void TxvShow(RadioGroup radioGroup, int checkedId){
-        //int num = Integer.parseInt(edtnumber.getText().toString());
         String outputnum = edtnumber.getText().toString();
         // 判斷選擇的 RadioButton
         if (radioGroup.getId() == R.id.rgGender) {
@@ -150,14 +148,5 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            String modifiedStr = data.getStringExtra("OutputStr");
-            if(modifiedStr != null && !modifiedStr.isEmpty()){
-                output.setText("有資料");
-            }else output.setText("無資料");
-        }
-        else output.setText("無資料");
     }
-
-
 }
