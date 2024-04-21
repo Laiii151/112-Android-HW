@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-
-
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, TextWatcher {
     private TextView output;
     private EditText edtnumber;
@@ -47,12 +45,17 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                     String Str = "";
                     try {
                         String text = edtnumber.getText().toString();
-                        if (!text.isEmpty()) {
-                            if (rg.getCheckedRadioButtonId() == -1) {
-                                Str += "請選擇性別!\n";
-                            }
-                            else if(type.getCheckedRadioButtonId() == -1) {
+                        if (rg.getCheckedRadioButtonId() == -1) {
+                            Str += "請選擇性別!\n";
+                            if(type.getCheckedRadioButtonId() == -1)
                                 Str += "請選擇票種!\n";
+                        }
+                        else if(type.getCheckedRadioButtonId() == -1) {
+                            Str += "請選擇票種!\n";
+                        }
+
+                        if (!text.isEmpty()) {
+                            if (rg.getCheckedRadioButtonId() == -1 || type.getCheckedRadioButtonId() == -1) {
                             }
                             else{
                                 // 如果 EditText 和 RadioButton 都有資料，執行跳轉操作
@@ -61,14 +64,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                                 startActivity(intent);
                             }
                         }
-                        else if(text == null){
-                            if (rg.getCheckedRadioButtonId() == -1) {
-                                Str += "請選擇性別!\n";
-                                if(type.getCheckedRadioButtonId() == -1)
-                                    Str += "請選擇票種!\n";
-                            }
-                            else if(type.getCheckedRadioButtonId() == -1)
-                                Str += "請選擇票種!\n";
+                        else{
                             throw new NumberFormatException();
                         }
                         output.setText(Str);
@@ -121,9 +117,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         if(! outputnum.isEmpty()){
             if(type.getCheckedRadioButtonId() == -1){
-                outputType="";
+                outputType = "";
             }
-
             else if(radioGroup.getId() == R.id.rgType) {
                 if (checkedId == R.id.rdbAdult) {
                     outputPrice = "\n金額：" + (500 * Integer.parseInt(outputnum));
