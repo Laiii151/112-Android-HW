@@ -8,23 +8,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
-    private ImageView img1, img2, img3, img4, img5;
     private int[] chkIDs = {R.id.chk1, R.id.chk2, R.id.chk3, R.id.chk4, R.id.chk5};
-    //private ArrayList<Integer> imgIDsLists = new ArrayList<>();
-    //private ArrayList<Integer> chkIDsLists = new ArrayList<>();
     private int[] imgIDs = {R.id.output1, R.id.output2, R.id.output3, R.id.output4,R.id.output5};
+
     private TextView txvShow;
-     @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         txvShow = (TextView) findViewById(R.id.showOrder);
-         for(int id : imgIDs){
-             ImageView img = (ImageView) findViewById(id);
-         }
+        for(int id : imgIDs){
+            ImageView img = (ImageView) findViewById(id);
+        }
 
         for(int id : chkIDs){
             CheckBox chk = (CheckBox) findViewById(id);
@@ -34,36 +30,26 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
-        int id = buttonView.getId();
+        //int id = buttonView.getId();
+        boolean checked = false;
         for (int i = 0; i < chkIDs.length; i++) {
             CheckBox chk = (CheckBox) findViewById(chkIDs[i]);
             if (chk.isChecked()) {
                 // 如果該checkbox被選中，顯示對應的圖像
                 ImageView img = (ImageView) findViewById(imgIDs[i]);
                 img.setVisibility(ImageView.VISIBLE);
+                checked = true;
+
             } else {
                 // 如果該checkbox未被選中，隱藏對應的圖像
                 ImageView img = (ImageView) findViewById(imgIDs[i]);
-                img.setVisibility(ImageView.INVISIBLE);
+                img.setVisibility(ImageView.GONE);
             }
-        }
-
-
-
-        for (int i : chkIDs){
-            CheckBox chk = (CheckBox) findViewById(i);
-            if(chk.isChecked()){
-                txvShow.setText("你點的餐點如下");
-                //ImgShow(i);
+            if(checked){
+                txvShow.setHint("你點的餐點如下");
             }else{
-                txvShow.setText("請選擇");
+                txvShow.setHint("請選擇");
             }
         }
     }
-    /*public void ImgShow(int num){
-        ImageView img = (ImageView) findViewById(num);
-        img.setVisibility(ImageView.VISIBLE);
-    }*/
 }
